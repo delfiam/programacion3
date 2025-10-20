@@ -18,11 +18,11 @@ for (k in 2:10) {
 }
 
 
-
+print ("Resultados")
 print(resultados)
 
 # determinamos mejor k 4 usando el método codo
-mejor_k <- 4
+mejor_k <- 3
 
 #seed así el grupo tiene más o menos el mismo resultado
 set.seed(1234)
