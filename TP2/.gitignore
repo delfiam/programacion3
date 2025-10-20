@@ -1,0 +1,25 @@
+# --- RStudio ---
+.Rproj.user/          # Carpeta temporal de RStudio
+.Rhistory             # Historial de comandos
+.RData                # Datos guardados automáticamente
+.Ruserdata            # Preferencias del usuario
+
+# --- Archivos de logs y temporales ---
+*.log
+*.tmp
+
+# --- Archivos de salida ---
+*.pdf
+*.png
+*.jpeg
+*.jpg
+*.svg
+
+# --- Paquetes locales ---
+/packrat/             # Si usas packrat
+.Renviron             # Variables de entorno locales
+
+# --- Otros ---
+.DS_Store             # macOS
+Thumbs.db             # Windows
+.Rproj.user
