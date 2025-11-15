@@ -1,6 +1,6 @@
 library(dplyr)
 library(ggplot2)
-library(caret)  # para la matriz de confusión
+library(caret) 
 
 # Paso 1: Importar datos
 datos <- read.csv("data/Titanic_data.csv", sep = ",", header = TRUE)
@@ -66,9 +66,28 @@ pred_binaria <- as.factor(pred_binaria)
 cat("\nMatriz de confusión:\n")
 print(confusionMatrix(pred_binaria, test$survived))
 
-# Paso 6: Conclusión preliminar ----------------------------------------
+print(ggplot(datos, aes(x = sex, fill = survived)) +
+  geom_bar(position = "fill") +
+  labs(title = "Proporción de Supervivencia por Sexo",
+       y = "Proporción",
+       x = "Sexo") +
+  scale_fill_brewer(palette = "Set1"))
 
-cat("\nInterpretación rápida (yo quiero agregar más cosas acá):\n")
-cat("Las variables 'sex' y 'pclass' suelen tener mayor peso en la predicción.\n")
-cat("Los pasajeros mujeres y de primera clase presentan más probabilidad de sobrevivir.\n")
-cat("Las variables numéricas fueron limpiadas de posibles caracteres no numéricos antes de convertirlas.\n")
+print(ggplot(datos, aes(x = pclass, fill = survived)) +
+  geom_bar(position = "fill") +
+  labs(title = "Supervivencia según Clase",
+       y = "Proporción",
+       x = "Clase") +
+  scale_fill_brewer(palette = "Paired"))
+  
+datos$grupo_edad <- cut(datos$age,
+                        breaks = c(0, 5, 12, 18, 40, 60, 100),
+                        labels = c("0-5", "6-12", "13-18", "19-40", "41-60", "60+"))
+
+print(ggplot(datos, aes(x = grupo_edad, fill = survived)) +
+  geom_bar(position = "fill") +
+  labs(title = "Supervivencia según rango de edad",
+       y = "Proporción",
+       x = "Grupo de edad") +
+  scale_fill_brewer(palette = "Purples"))
+
