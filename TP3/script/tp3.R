@@ -10,32 +10,32 @@ str(datos)
 
 # Paso 2: Limpieza de datos ------------------------------
 # Eliminar columnas innecesarias
-datos <- datos |> select(-x, -name, -ticket, -home.dest, cabin)
+datos <- datos |> select(-x, -name, -ticket, -home.dest, -cabin)
+
+datos[datos == "?"] <- NA
+
+# Limpieza de variables numéricas 
+datos$pclass <- as.numeric(gsub("[^0-9.]", "", datos$pclass))
+datos$age    <- as.numeric(gsub("[^0-9.]", "", datos$age))
+datos$sibsp  <- as.numeric(gsub("[^0-9.]", "", datos$sibsp))
+datos$parch  <- as.numeric(gsub("[^0-9.]", "", datos$parch))
+datos$fare   <- as.numeric(gsub("[^0-9.]", "", datos$fare))
+
+# Conversión de variables categóricas
+datos$survived <- as.factor(datos$survived)
+datos$sex      <- as.factor(datos$sex)
+datos$embarked <- as.factor(datos$embarked)
+datos$pclass   <- as.factor(datos$pclass)
 
 # Verificar valores faltantes
 cat("\nCantidad de valores faltantes por variable:\n")
 print(colSums(is.na(datos)))
 
-# Eliminar filas con NA
+# Eliminar NA
 datos <- na.omit(datos)
 cat("\nFilas después de eliminar NA:", nrow(datos), "\n")
 
-# Limpieza de variables numéricas (quitamos símbolos o texto, si los hay)
-datos$pclass <- as.numeric(gsub("[^0-9.]", "", datos$pclass))
-datos$age <- as.numeric(gsub("[^0-9.]", "", datos$age))
-datos$sibsp <- as.numeric(gsub("[^0-9.]", "", datos$sibsp))
-datos$parch <- as.numeric(gsub("[^0-9.]", "", datos$parch))
-datos$fare <- as.numeric(gsub("[^0-9.]", "", datos$fare))
 
-# Conversión de variables categóricas importantes
-datos$survived <- as.factor(datos$survived)
-datos$sex <- as.factor(datos$sex)
-datos$embarked <- as.factor(datos$embarked)
-datos$pclass <- as.factor(datos$pclass)
-
-
-
-# Resumen general
 cat("\nResumen de datos limpios:\n")
 print(summary(datos))
 
@@ -84,7 +84,7 @@ datos$grupo_edad <- cut(datos$age,
                         breaks = c(0, 5, 12, 18, 40, 60, 100),
                         labels = c("0-5", "6-12", "13-18", "19-40", "41-60", "60+"))
 
-print(ggplot(datos, aes(x = grupo_edad, fill = survived)) +
+print(ggplot(datos %>% filter(!is.na(age)), aes(x = grupo_edad, fill = survived)) +
   geom_bar(position = "fill") +
   labs(title = "Supervivencia según rango de edad",
        y = "Proporción",
